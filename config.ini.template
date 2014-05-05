@@ -1,0 +1,118 @@
+#;global section
+[config]
+remote = False      #Get settings from a server?
+uri = 'http://localhost/taxidi/config.ini'
+sshhost =
+sshpath =
+user =
+pass =
+key =   #(self-signed) certificate or key file
+name = 'Kiosk1'     #;This instance's name.
+defaultActivity = 'Explorers'
+autoServices = True #True will use time table to switch activities automatically
+secureCodeRemote = False
+secureCodeURI = http://localhost/cgi-bin/secure-code.php  #path to secure code script path
+
+[printing]
+enable = False  #True to send output to printer
+preview = True  #Show preview
+printer = ""    #Name of system printer to use.
+
+[barcode]
+#Support for serial barcode scanner (TODO)
+enable = False
+device = "/dev/ttyUSB0"
+
+[database]
+driver = sqlite     #sqlite, postgres, or mysql
+file = 'database/users.db'   #for sqlite only
+host =              #[TODO] For Postgres and MySQL
+database = 'taxidi' #Name of database to use
+user =
+pass =
+cipher =
+encrypt =
+sshScript =         #Script to run before connecting; i.e. for SSH tunnelling TCP
+
+[webcam]
+enable = False
+device = -1           #Device index; 0 for video0, etc. -1 or blank for auto.
+#resolution is hard coded as 640x480.
+cropBars = True      #True to show camera crop region (480x480)
+#Directories to save captured photos to.  Use NFS or Samba for network option.
+#Leave blank if upload = True.
+store = local    #Either local (file, NFS) or remote (http).
+target = database/photos/  #relative pwd is ~/.taxidi/ or %APPDATA%\\taxidi\\
+thumbs = database/photos/thumbs
+upload = False      #Upload to a server with http?
+url = 'http://localhost/taxidi/api/v1/photo/upload.cgi'         #TODO: upload
+fetch = 'http://localhost/taxidi/api/v1/photo/data/{id}.jpg'    #TODO: remote server
+#if user/pass for photo upload is missing, read from [config] section instead.
+#if undefined there, then raise an error.
+
+[visitor]
+expires = 15  #days till auto-expire. 0 for never.
+paging =      #%id% is replaced with last four digits of phone.
+#^ if left blank, defaults to '%id%'
+
+[interface]
+fullscreen = False
+menu = True             #Show the program menu
+menuFullscreen = False  #True will force showing the menu when fullscreen.
+libnotify = True
+windowX = 1020
+windowY = 700
+theme = 'air'       #Name of the default theme to use.
+
+[logging]
+file = error.log
+
+[report]
+enabled = True                          #;enable local file archiving/reporting
+format = csv                            #;csv, txt, or ods (or xls [ughhhh!])
+directory = 'archive/'                  #;where to save local archived reports to
+file = '{hostname}-%Y-%m-%d.csv'        #;formatting follows strftime() directives.
+[[email]]
+to = 'journeytaxidi@gmail.com'
+from = 'journeytaxidi@gmail.com'
+subject = '{hostname} - Taxídí daily check-in report'
+preamble = 'Report attached.'
+host = 'smtp.gmail.com:587'             #;host:port
+TLS = True                              #;Use ssl/tls?
+user = 'journeytaxidi'                  #;SMTP auth username (if required)
+pass = 'paiSh4xelohvae5A'
+[[remote]]
+enabled = False                         #;[TODO] remote logging to an accumulator server? [HTTP(S)]?
+method =
+host =
+user =
+pass =
+
+[authentication]
+method = none          #;none, single, database, (unix?, kerberos?, ldap?)
+config = True          #;enforce password protection?
+startup = False
+#;SHA256 password hash for single user mode.
+hash = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'
+
+[notifications]
+growl = False
+growlHost =
+growlPort =
+techbooth = False
+techboothEmail = 
+techboothSubject = "Nursurey Alert!"
+#Message to format nursery alerts with:
+message = "Nursery alert for {code}. {name} needs you. Please come to the {activity} child check-in station."
+sms = True
+smsType = gvoice #Google voice is currently the only one implemented.
+email = # Google Account email address (one associated w/ your Voice accoulnt)
+password = # Raw password used for login
+
+[fellowshipone]
+enable = False
+#;Settings for token-based authentication:
+url = 'https://journeychurch.staging.fellowshiponeapi.com' #;base url without trailing slash
+key = "123" #;Consumer key
+secret = "deadbeef-faf191-00000-00000-0000000000" #;Consumer secret
+#;Do we still need a user/pass? This API is somewhat confusing...
